@@ -2,7 +2,7 @@ const { createArticle, selectArticle, selectArticleById, selectArticleByKeys, se
 class V1ArticleController {
     async v1AddArticle (ctx, next) {
         const { title, content, img, tag, isTop, desc } = (ctx.request.body);
-        if (!title || !content || !img || !tag || !desc) {
+        if (!title || !content || !desc) {
             console.error("参数校验错误");
             ctx.status = 400;
             ctx.app.emit(
