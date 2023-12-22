@@ -1,4 +1,5 @@
 const { APPID, SECRET } = require('../config/config.default')
+const User = require("../model/user.model");
 const axios = require('axios')
 
 const { getUserInfoByOpenid, UserCreate } = require('../service/v1.user.service')
@@ -8,7 +9,7 @@ const { JWTSECRET } = require("../config/config.default");
 
 const getOpenid = async (ctx, next) => {
     const { code ,name} = ctx.request.body
-    console.log(name,'name');
+    console.log(code, 'code22222');
     let result = await axios({
         method: 'get',
         url: `https://api.weixin.qq.com/sns/jscode2session?appid=${APPID}&secret=${SECRET}&js_code=${code}&grant_type=authorization_code`
@@ -20,6 +21,7 @@ const getOpenid = async (ctx, next) => {
 }
 
 const hasUserInfo = async (ctx, next) => {
+  console.log(ctx, 'ctx999');
     const res = await getUserInfoByOpenid(ctx.state.v1user.openid)
     if (!res) {
         // 说明数据库没有该用户信息
@@ -28,6 +30,35 @@ const hasUserInfo = async (ctx, next) => {
     ctx.state.v1user = {
         session_key: ctx.state.v1user.session_key,
         ...res.dataValues
+    }
+    await next()
+}
+
+const hasAdminUserInfo = async (ctx, next) => {
+  console.log(ctx.request.body, 'ctx-admin')
+  const { username, password } = (ctx.request.body)
+  const opt = {};
+    username && Object.assign(opt, { user_name: username });
+    password && Object.assign(opt, { password: password });
+    let result
+    try {
+      result = await User.findOne({
+        attributes: ["user_name", "password"],
+        where: opt,
+      });
+    } catch(error) {
+      console.log(error);
+    }
+    if (!result) {
+        // 说明数据库没有该用户信息
+        ctx.state = {
+          data: null
+        }
+    } else {
+      ctx.state.data = {
+        ...result.dataValues,
+        token: 'madaha'
+      }
     }
     await next()
 }
@@ -67,5 +98,6 @@ const jwtTokenCheck = async (ctx, next) => {
 module.exports = {
     getOpenid,
     hasUserInfo,
+    hasAdminUserInfo,
     jwtTokenCheck
 }
