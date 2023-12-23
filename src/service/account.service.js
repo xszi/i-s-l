@@ -14,18 +14,16 @@ class AccountService {
     return result;
   }
 
-  async getAccountInfo ({ id, create_date, expense_type, expense_amount, remark }) {
-    const opt = {};
-    id && Object.assign(opt, { id });
-    create_date && Object.assign(opt, { create_date });
-    expense_type && Object.assign(opt, { expense_type });
-    expense_amount && Object.assign(opt, { expense_amount });
-    remark && Object.assign(opt, { remark });
-    const result = await Account.findOne({
-      attributes: ["id", "create_date", "expense_type", "expense_amount", "remark" ],
-      where: opt,
-    });
-    return result ? result.dataValues : null;
+  async getAccountPage ({ page, pageSize }) {
+    try {
+      const result = await Account.findAndCountAll({
+        where: {},
+        offset: (page * 1 - 1) * pageSize,
+        limit: pageSize * 1
+      });
+      return result;
+    } catch (error) {
+    }
   }
 
   async updateById (obj) {
