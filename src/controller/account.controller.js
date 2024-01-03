@@ -59,13 +59,13 @@ class AccountController {
     try {
       const res = await getAccountPage({ page, pageSize });
       ctx.body = {
-        code: 200,
+        code: 0,
         msg: "操作成功",
-        data: res
+        result: res
       };
     } catch (error) {
       ctx.body = {
-        code: 500,
+        code: 1,
         msg: "服务器错误",
         result: {
           data: null
