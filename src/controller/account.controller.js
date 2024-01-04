@@ -7,15 +7,14 @@ class AccountController {
       expense_type,
       expense_amount,
       remark } = (ctx.request.body);
-    if (!create_date || !expense_type || !expense_amount || !remark ) {
-      console.error("必填项为空");
+    if (!create_date || !expense_type || !expense_amount ) {
       ctx.status = 400;
       ctx.app.emit(
         "error",
         {
-          code: 400,
+          code: 1,
           msg: "请输入必填项",
-          result: "",
+          result: null,
         },
         ctx
       );
@@ -27,29 +26,22 @@ class AccountController {
         expense_amount,
         remark);
       ctx.body = {
-        code: 200,
+        code: 0,
         msg: "操作成功",
-        result: {
-          data: null,
-        },
       };
     } catch (error) {
       if (error.parent.errno == 1062) {
         ctx.status = 500
         ctx.body = {
-          code: 500,
+          code: 1,
           msg: "账单已存在",
-          result: {
-            data: null,
-          }
+          result: null
         };
       } else {
         ctx.body = {
-          code: 500,
+          code: 1,
           msg: "服务器错误",
-          result: {
-            data: null
-          },
+          result: null,
         };
       }
     }
@@ -67,9 +59,7 @@ class AccountController {
       ctx.body = {
         code: 1,
         msg: "服务器错误",
-        result: {
-          data: null
-        },
+        result: null
       };
     }
   }
