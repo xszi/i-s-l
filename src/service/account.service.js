@@ -36,10 +36,12 @@ class AccountService {
     }
   }
 
-  async getAccountPage ({ page, pageSize }) {
+  async getAccountPage ({ page, pageSize, create_date }) {
     try {
+      const newOpt = {}
+      create_date && Object.assign(newOpt, { create_date })
       const result = await Account.findAndCountAll({
-        where: {},
+        where: newOpt,
         offset: (page * 1 - 1) * pageSize,
         limit: pageSize * 1
       });

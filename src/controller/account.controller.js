@@ -133,9 +133,9 @@ class AccountController {
   }
   // 查询账单
   async qryAccountPage (ctx, next) {
-    const { page, pageSize } = (ctx.request.body);
+    const { page, pageSize, create_date } = (ctx.request.body);
     try {
-      const res = await getAccountPage({ page, pageSize });
+      const res = await getAccountPage({ page, pageSize, create_date });
       ctx.body = {
         code: 0,
         msg: "操作成功",
