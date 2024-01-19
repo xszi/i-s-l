@@ -5,13 +5,16 @@
 3. 约定路由+动态路由
 4. 线上访问地址：http://120.76.247.123:3000/
 
-`Failed to connect to github.com port 443 after 21063 ms: Couldn't connect to server`解决办法(win+R 打开 cmd)
+[解决]`Failed to connect to github.com port 443 after 21063 ms: Couldn't connect to server`解决办法(win+R 打开 cmd)
 
 ```
 git config --global --unset http.proxy
 git config --global --unset https.proxy
 ipconfig/flushdns
 ```
+
+[解决]`git-ssh: connect to host github.com port 22: Connection timed out`
+[https://www.jianshu.com/p/c3aac5024877](https://www.jianshu.com/p/c3aac5024877)
 
 # eslint
 
